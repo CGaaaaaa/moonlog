@@ -1,5 +1,6 @@
 // Appender 构造函数和辅助函数
 
+///|
 pub fn ConsoleAppender::new(formatter : SimpleFormatter) -> ConsoleAppender {
   { formatter: Simple(formatter) }
 }
@@ -13,11 +14,12 @@ pub fn ConsoleAppender::new(formatter : SimpleFormatter) -> ConsoleAppender {
 //   { formatter: Json(json_formatter) }
 // }
 
+///|
 pub fn FileAppender::new(
   file_path : String,
   formatter : SimpleFormatter,
   max_file_size : Int64,
-  max_backup_files : Int
+  max_backup_files : Int,
 ) -> FileAppender {
   { file_path, formatter: Simple(formatter), max_file_size, max_backup_files }
 }
@@ -33,25 +35,37 @@ pub fn FileAppender::new(
 // }
 
 // Multi Appender helper functions
+
+///|
 pub fn create_multi_appender() -> AnyAppender {
   Multi(Array::new())
 }
 
-pub fn add_to_multi_appender(multi : AnyAppender, appender : AnyAppender) -> AnyAppender {
+///|
+pub fn add_to_multi_appender(
+  multi : AnyAppender,
+  appender : AnyAppender,
+) -> AnyAppender {
   match multi {
     Multi(appenders) => {
       appenders.push(appender)
       Multi(appenders)
     }
-    _ => multi  // 如果不是Multi类型，保持不变
+    _ => multi // 如果不是Multi类型，保持不变
   }
 }
 
-// Async Appender helper functions  
-pub fn create_async_appender(inner : AnyAppender, max_buffer_size : Int) -> AnyAppender {
+// Async Appender helper functions
+
+///|
+pub fn create_async_appender(
+  inner : AnyAppender,
+  max_buffer_size : Int,
+) -> AnyAppender {
   Async(inner, Array::new(), max_buffer_size)
 }
 
+///|
 pub fn flush_async_appender(async_appender : AnyAppender) -> Unit {
   match async_appender {
     Async(inner, buffer, _) => {
@@ -60,12 +74,16 @@ pub fn flush_async_appender(async_appender : AnyAppender) -> Unit {
       }
       buffer.clear()
     }
-    _ => ()  // 如果不是Async类型，不做任何操作
+    _ => () // 如果不是Async类型，不做任何操作
   }
 }
 
 // Filtered Appender helper functions
-pub fn create_filtered_appender(inner : AnyAppender, min_level : LogLevel) -> AnyAppender {
+
+///|
+pub fn create_filtered_appender(
+  inner : AnyAppender,
+  min_level : LogLevel,
+) -> AnyAppender {
   Filtered(inner, min_level)
 }
-

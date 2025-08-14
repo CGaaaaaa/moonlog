@@ -1,9 +1,11 @@
 // 日志配置系统
+
+///|
 pub(all) struct LogConfig {
   level : LogLevel
   use_console : Bool
   console_colored : Bool
-  log_file_path : String?  // Optional 文件路径
+  log_file_path : String? // Optional 文件路径
   max_file_size : Int64
   max_backup_files : Int
   json_format : Bool
@@ -12,6 +14,8 @@ pub(all) struct LogConfig {
 } derive(Show)
 
 // 默认配置
+
+///|
 pub fn LogConfig::default() -> LogConfig {
   {
     level: LogLevel::Info,
@@ -22,11 +26,13 @@ pub fn LogConfig::default() -> LogConfig {
     max_backup_files: 5,
     json_format: false,
     include_timestamp: true,
-    include_module: true
+    include_module: true,
   }
 }
 
 // 从环境变量加载配置
+
+///|
 pub fn LogConfig::from_env() -> LogConfig {
   // 在MoonBit中，直接创建新的配置对象而不是修改字段
   {
@@ -38,14 +44,15 @@ pub fn LogConfig::from_env() -> LogConfig {
     max_backup_files: 5,
     json_format: parse_bool_env("false"),
     include_timestamp: true,
-    include_module: true
+    include_module: true,
   }
 }
 
 // 从配置对象创建Logger
+
+///|
 pub fn configure_logger(config : LogConfig) -> Logger {
   let mut logger = Logger::new(config.level, "default")
-  
   if config.use_console {
     let formatter = if config.json_format {
       // 这里需要创建一个通用的formatter接口
@@ -55,7 +62,6 @@ pub fn configure_logger(config : LogConfig) -> Logger {
     } else {
       SimpleFormatter::new(config.include_timestamp, config.include_module)
     }
-    
     let console_appender = ConsoleAppender::new(formatter)
     logger = logger.add_console_appender(console_appender)
   }
@@ -63,6 +69,8 @@ pub fn configure_logger(config : LogConfig) -> Logger {
 }
 
 // 辅助函数：解析日志级别
+
+///|
 fn parse_log_level_env(level_str : String) -> LogLevel {
   match level_str {
     "TRACE" => LogLevel::Trace
@@ -76,6 +84,8 @@ fn parse_log_level_env(level_str : String) -> LogLevel {
 }
 
 // 辅助函数：解析布尔值
+
+///|
 fn parse_bool_env(bool_str : String) -> Bool {
   match bool_str {
     "true" | "TRUE" | "1" => true
