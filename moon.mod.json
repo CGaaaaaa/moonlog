@@ -1,0 +1,9 @@
+{
+  "name": "moonlog",
+  "version": "0.1.0",
+  "description": "A flexible and efficient logging library for MoonBit",
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": "https://github.com/yourusername/moonlog",
+  "keywords": ["logging", "moonbit", "structured-logging"]
+}
