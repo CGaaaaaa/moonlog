@@ -52,8 +52,8 @@ pub fn LogValue::to_string(self : LogValue) -> String {
 
 // 结构化日志字段
 pub struct LogField {
-  pub key : String
-  pub value : LogValue
+  key : String
+  value : LogValue
 } derive(Eq, Show)
 
 pub fn LogField::new(key : String, value : LogValue) -> LogField {
@@ -66,11 +66,11 @@ pub fn LogField::to_string(self : LogField) -> String {
 
 // 日志条目
 pub struct LogEntry {
-  pub level : LogLevel
-  pub message : String
-  pub fields : Array[LogField]
-  pub module_name : String
-  pub timestamp : Int64
+  level : LogLevel
+  message : String
+  fields : Array[LogField]
+  module_name : String
+  timestamp : Int64
 }
 
 pub fn LogEntry::new(
@@ -110,7 +110,7 @@ impl Appender for AppenderBox with append(self, entry) {
 }
 
 // 将任何 Appender 转换为 AppenderBox
-pub fn AppenderBox::from[A : Appender](appender : A) -> AppenderBox {
+pub fn[A : Appender] AppenderBox::from(appender : A) -> AppenderBox {
   AppenderBox::Box(fn(entry) { appender.append(entry) })
 }
 
@@ -126,7 +126,7 @@ pub fn Logger::new(min_level : LogLevel, module_name : String) -> Logger {
   { appenders: Array::new(), min_level, module_name }
 }
 
-pub fn Logger::add_appender[A : Appender](self : Logger, appender : A) -> Logger {
+pub fn[A : Appender] Logger::add_appender(self : Logger, appender : A) -> Logger {
   self.appenders.push(AppenderBox::from(appender))
   self
 }
@@ -251,6 +251,56 @@ pub fn error_with_fields(message : String, fields : Array[LogField]) -> Unit {
 
 pub fn fatal_with_fields(message : String, fields : Array[LogField]) -> Unit {
   get_global_logger().log(LogLevel::Fatal, message, fields)
+} 
+
+// StdoutAppender - 标准输出日志 Appender
+// 这是一个简单的实现，只依赖基础的 println 函数
+
+// 标准输出 Appender
+pub struct StdoutAppender {
+  show_timestamp : Bool
+  show_module : Bool
+}
+
+impl Appender for StdoutAppender with append(self, entry : LogEntry) {
+  let parts : Array[String] = Array::new()
+  
+  // 添加时间戳（如果启用）
+  if self.show_timestamp {
+    parts.push(entry.timestamp.to_string())
+  }
+  
+  // 添加日志级别
+  parts.push("[" + entry.level.to_string() + "]")
+  
+  // 添加模块名（如果启用）
+  if self.show_module {
+    parts.push("[" + entry.module_name + "]")
+  }
+  
+  // 添加消息
+  parts.push(entry.message)
+  
+  // 构建基础日志行
+  let base_line = parts.join(" ")
+  
+  // 添加字段（如果有）
+  if entry.fields.length() > 0 {
+    let field_strings = entry.fields.map(fn(f) { f.to_string() })
+    let fields_str = field_strings.join(", ")
+    println(base_line + " {" + fields_str + "}")
+  } else {
+    println(base_line)
+  }
+}
+
+// 便捷构造函数
+pub fn StdoutAppender::new() -> StdoutAppender {
+  { show_timestamp: true, show_module: true }
+}
+
+pub fn StdoutAppender::with_config(show_timestamp : Bool, show_module : Bool) -> StdoutAppender {
+  { show_timestamp, show_module }
 } 
 
  

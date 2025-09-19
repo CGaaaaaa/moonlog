@@ -6,27 +6,27 @@ test "global logger basic functionality" {
   set_global_logger(default_logger)
   
   let logger = get_global_logger()
-  inspect!(logger.min_level, content="Info")
-  inspect!(logger.module_name, content="global")
-  inspect!(logger.appenders.length(), content="0")
+  inspect(logger.min_level, content="Info")
+  inspect(logger.module_name, content="global")
+  inspect(logger.appenders.length(), content="0")
 }
 
 test "logger creation and methods" {
   let logger = Logger::new(LogLevel::Debug, "test_module")
-  inspect!(logger.min_level, content="Debug")
-  inspect!(logger.module_name, content="test_module")
+  inspect(logger.min_level, content="Debug")
+  inspect(logger.module_name, content="test_module")
   
   let updated_logger = logger.set_level(LogLevel::Warn)
-  inspect!(updated_logger.min_level, content="Warn")
+  inspect(updated_logger.min_level, content="Warn")
   
   let renamed_logger = logger.set_module("new_module")
-  inspect!(renamed_logger.module_name, content="new_module")
+  inspect(renamed_logger.module_name, content="new_module")
 }
 
 test "global level setting" {
   set_global_level(LogLevel::Debug)
   let logger = get_global_logger()
-  inspect!(logger.min_level, content="Debug")
+  inspect(logger.min_level, content="Debug")
   
   // 恢复默认级别
   set_global_level(LogLevel::Info)
