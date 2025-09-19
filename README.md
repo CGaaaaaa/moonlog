@@ -12,16 +12,32 @@ MoonLog 是一个基于 trait 设计的日志库，提供核心接口和可扩�
 - **🌐 全局设置**: 提供全局 Logger 管理
 - **🎯 专注接口**: 主包只提供核心接口，具体实现可分离到不同包
 
-## 📁 架构设计
+## 📁 包结构
 
 ```
-moonlog/                    # 主包 - 核心接口和 trait 定义
-├── core.mbt               # 核心类型和 trait
-├── stdout_appender.mbt    # StdoutAppender 示例实现
-├── test_*.mbt            # 测试文件
-└── demo_package/         # 独立的示例包
-    ├── moon.pkg.json     # 导入主包
-    └── demo.mbt          # 使用示例
+moonlog/                    # 单一包结构（推荐用于专门的库）
+├── core.mbt               # 核心类型、trait 和实现
+├── test_core.mbt          # 核心功能测试
+├── test_global.mbt        # 全局功能测试
+├── moon.pkg.json          # 包配置
+├── moon.mod.json          # 项目配置
+└── README.md              # 文档
+```
+
+### 📋 **关于包结构的最佳实践**
+
+**对于专门的库（如日志库）：**
+- ✅ **平铺结构**: 简单、直接，适合单一用途的库
+- ✅ **文件分离**: 按功能分离文件（核心、测试等）
+- ✅ **清晰命名**: 文件名能明确表达其用途
+
+**对于复杂应用或多模块项目：**
+```
+project/
+├── lib/                   # 核心库
+├── examples/              # 示例代码
+├── tools/                 # 工具程序
+└── moon.mod.json          # 工作空间配置
 ```
 
 ## 🚀 快速开始
@@ -115,12 +131,20 @@ let logger = Logger::new(LogLevel::Info, "custom")
 - **远程收集**: 可在独立包中实现 `OpenTelemetryAppender`
 - **自定义格式**: 用户可实现自定义的 `Appender`
 
-## 🧪 运行示例
+## 🧪 运行测试和构建
 
 ```bash
-# 构建并运行示例
-cd demo_package
-moon run main
+# 运行所有测试
+moon test
+
+# 构建库
+moon build
+
+# 格式化代码
+moon fmt
+
+# 检查代码
+moon check
 ```
 
 ## 📋 生成接口文档
