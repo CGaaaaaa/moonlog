@@ -2,6 +2,7 @@
 // 提供日志系统的核心 trait 和全局设置
 
 // 日志级别
+
 ///|
 pub enum LogLevel {
   Trace
