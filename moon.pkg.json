@@ -1,12 +1,1 @@
-{
-  "is-main": false,
-  "import": [],
-  "link": {
-    "wasm": {
-      "exports": []
-    },
-    "wasm-gc": {
-      "exports": []
-    }
-  }
-}
+{}
