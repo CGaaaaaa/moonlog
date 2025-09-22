@@ -1,67 +1,85 @@
 # MoonLog
 
-**轻量级 MoonLang 日志库**
+**Lightweight Logging Library for MoonLang**
 
-MoonLog 是一个基于 trait 设计的日志库，提供核心接口和可扩展的 Appender 系统。
+[🇨🇳 中文](README_zh_CN.md) | [🇺🇸 English](README.md)
 
-## ✨ 核心特性
+MoonLog is a trait-based logging library that provides core interfaces and an extensible Appender system.
 
-- **🔧 Trait 设计**: 基于 `Appender` trait，支持用户自定义实现
-- **⚡ 零依赖**: 核心库完全独立
-- **📊 结构化日志**: 支持键值对字段
-- **🌐 全局设置**: 提供全局 Logger 管理
-- **🎯 专注接口**: 主包只提供核心接口，具体实现可分离到不同包
+## ✨ Core Features
 
-## 📁 包结构
+- **🔧 Trait-Based Design**: Built on `Appender` trait, supports user-defined implementations
+- **⚡ Zero Dependencies**: Core library is completely independent
+- **📊 Structured Logging**: Supports key-value field pairs
+- **🌐 Global Configuration**: Provides global Logger management
+- **🎯 Interface Focused**: Main package provides only core interfaces, implementations can be separated into different packages
+
+## 🚀 Quick Start
+
+### Run Demo
+```bash
+# View basic usage demonstration
+moon run demo
+
+# View complete documentation
+cd demo && cat README.md
+```
+
+## 📁 Package Structure
 
 ```
-moonlog/                    # 单一包结构（推荐用于专门的库）
-├── core.mbt               # 核心类型、trait 和实现
-├── test_core.mbt          # 核心功能测试
-├── test_global.mbt        # 全局功能测试
-├── moon.pkg.json          # 包配置
-├── moon.mod.json          # 项目配置
-└── README.md              # 文档
+moonlog/                    # Single package structure (recommended for dedicated libraries)
+├── core.mbt               # Core types, traits and implementations
+├── test_core.mbt          # Core functionality tests
+├── test_global.mbt        # Global functionality tests
+├── demo/                  # Usage examples and demonstrations
+│   ├── main.mbt          # Basic demo
+│   ├── advanced.mbt      # Advanced configuration examples
+│   ├── moon.pkg.json     # Demo package configuration
+│   └── README.md         # Demo documentation
+├── moon.pkg.json          # Package configuration
+├── moon.mod.json          # Project configuration
+└── README.md              # Documentation
 ```
 
-### 📋 **关于包结构的最佳实践**
+### 📋 **Best Practices for Package Structure**
 
-**对于专门的库（如日志库）：**
-- ✅ **平铺结构**: 简单、直接，适合单一用途的库
-- ✅ **文件分离**: 按功能分离文件（核心、测试等）
-- ✅ **清晰命名**: 文件名能明确表达其用途
+**For dedicated libraries (like logging libraries):**
+- ✅ **Flat Structure**: Simple and direct, suitable for single-purpose libraries
+- ✅ **File Separation**: Separate files by functionality (core, tests, etc.)
+- ✅ **Clear Naming**: File names clearly express their purpose
 
-**对于复杂应用或多模块项目：**
+**For complex applications or multi-module projects:**
 ```
 project/
-├── lib/                   # 核心库
-├── examples/              # 示例代码
-├── tools/                 # 工具程序
-└── moon.mod.json          # 工作空间配置
+├── lib/                   # Core library
+├── examples/              # Example code
+├── tools/                 # Utility programs
+└── moon.mod.json          # Workspace configuration
 ```
 
-## 🚀 快速开始
+## 🚀 Usage
 
-### 基础使用
+### Basic Usage
 
 ```moonbit
-// 创建 Appender
+// Create Appender
 let appender = StdoutAppender::new()
 
-// 创建 Logger
+// Create Logger
 let logger = Logger::new(LogLevel::Info, "my_app")
   .add_appender(appender)
 
-// 设置为全局 logger
+// Set as global logger
 set_global_logger(logger)
 
-// 使用全局日志函数
-info("应用启动")
-warn("这是一条警告")
-error("发生错误")
+// Use global logging functions
+info("Application started")
+warn("This is a warning")
+error("An error occurred")
 ```
 
-### 结构化日志
+### Structured Logging
 
 ```moonbit
 let fields = [
@@ -70,97 +88,97 @@ let fields = [
   field_bool("success", true)
 ]
 
-info_with_fields("用户操作完成", fields)
+info_with_fields("User operation completed", fields)
 ```
 
-### 自定义 Appender
+### Custom Appender
 
 ```moonbit
-// 实现自定义 Appender
+// Implement custom Appender
 struct MyAppender { }
 
 impl Appender for MyAppender with append(self, entry) {
-  // 自定义日志处理逻辑
+  // Custom log processing logic
   println("Custom: " + entry.message)
 }
 
-// 使用自定义 Appender
+// Use custom Appender
 let my_appender = MyAppender { }
 let logger = Logger::new(LogLevel::Info, "custom")
   .add_appender(my_appender)
 ```
 
-## 📚 API 文档
+## 📚 API Documentation
 
-### 核心类型
+### Core Types
 
-- `LogLevel`: 日志级别枚举 (Trace, Debug, Info, Warn, Error, Fatal)
-- `LogEntry`: 日志条目结构
-- `LogField`: 结构化字段
-- `Logger`: 日志记录器
+- `LogLevel`: Log level enumeration (Trace, Debug, Info, Warn, Error, Fatal)
+- `LogEntry`: Log entry structure
+- `LogField`: Structured field
+- `Logger`: Logger
 
-### 核心 Trait
+### Core Trait
 
-- `Appender`: 日志输出器接口，允许用户自定义实现
+- `Appender`: Log output interface, allows user-defined implementations
 
-### 全局函数
+### Global Functions
 
-**基础日志记录:**
+**Basic Logging:**
 - `trace(message)`, `debug(message)`, `info(message)`
 - `warn(message)`, `error(message)`, `fatal(message)`
 
-**结构化日志记录:**
+**Structured Logging:**
 - `trace_with_fields(message, fields)`, `debug_with_fields(message, fields)`
 - `info_with_fields(message, fields)`, `warn_with_fields(message, fields)`
 - `error_with_fields(message, fields)`, `fatal_with_fields(message, fields)`
 
-**字段构造:**
+**Field Construction:**
 - `field_str(key, value)`, `field_int(key, value)`
 - `field_double(key, value)`, `field_bool(key, value)`
 
-**全局设置:**
+**Global Configuration:**
 - `get_global_logger()`, `set_global_logger(logger)`
 - `set_global_level(level)`
 
-## 🔧 扩展性
+## 🔧 Extensibility
 
-该接口允许多种不同的实现：
+This interface allows for various different implementations:
 
-- **标准输出**: `StdoutAppender` (本包提供示例实现)
-- **文件输出**: 可在独立包中实现 `FileAppender`
-- **远程收集**: 可在独立包中实现 `OpenTelemetryAppender`
-- **自定义格式**: 用户可实现自定义的 `Appender`
+- **Standard Output**: `StdoutAppender` (example implementation provided in this package)
+- **File Output**: `FileAppender` can be implemented in a separate package
+- **Remote Collection**: `OpenTelemetryAppender` can be implemented in a separate package
+- **Custom Format**: Users can implement custom `Appender`
 
-## 🧪 运行测试和构建
+## 🧪 Running Tests and Building
 
 ```bash
-# 运行所有测试
+# Run all tests
 moon test
 
-# 构建库
+# Build library
 moon build
 
-# 格式化代码
+# Format code
 moon fmt
 
-# 检查代码
+# Check code
 moon check
 ```
 
-## 📋 生成接口文档
+## 📋 Generate Interface Documentation
 
 ```bash
-# 生成最新的 API 接口描述
+# Generate latest API interface description
 moon info
 ```
 
-## 🏗️ 设计原则
+## 🏗️ Design Principles
 
-1. **核心专注**: 主包只提供核心接口和基础实现
-2. **职责分离**: 不同类型的 Appender 应分离到不同包
-3. **用户扩展**: 通过 `Appender` trait 支持用户自定义实现
-4. **零依赖**: 核心库不依赖外部库
+1. **Core Focus**: Main package provides only core interfaces and basic implementations
+2. **Separation of Concerns**: Different types of Appenders should be separated into different packages
+3. **User Extension**: Support user-defined implementations through `Appender` trait
+4. **Zero Dependencies**: Core library does not depend on external libraries
 
-## 📄 许可证
+## 📄 License
 
 MIT License

@@ -2,6 +2,16 @@
 target/
 *.mi
 *.core
+*.mbti
+pkg.generated.mbti
+
+# Coverage and test artifacts
+_coverage/
+*.coverage
+bisect.coverage
+
+# Dependencies
+.mooncakes/
 
 # IDE files
 .vscode/
