@@ -2,7 +2,7 @@
 
 **Lightweight Logging Library for MoonLang**
 
-[🇨🇳 中文](README_zh_CN.md) | [🇺🇸 English](README.md)
+English | [中文](README_zh_CN.md)
 
 MoonLog is a trait-based logging library that provides core interfaces and an extensible Appender system.
 
