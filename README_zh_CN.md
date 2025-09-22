@@ -2,7 +2,7 @@
 
 **轻量级 MoonLang 日志库**
 
-[🇨🇳 中文](README_zh_CN.md) | [🇺🇸 English](README.md)
+[English](README.md) | 中文
 
 MoonLog 是一个基于 trait 设计的日志库，提供核心接口和可扩展的 Appender 系统。
 
